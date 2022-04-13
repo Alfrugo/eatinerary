@@ -19,5 +19,6 @@
   "bugs": {
     "url": "https://github.com/Alfrugo/eatinerary/issues"
   },
-  "homepage": "https://github.com/Alfrugo/eatinerary#readme"
+  "homepage": "https://github.com/Alfrugo/eatinerary#readme",
+  "engines": {"node":"16.13.1","npm":"8.1.2"}
 }
