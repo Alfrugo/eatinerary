@@ -1,12 +1,27 @@
 const { Schema } = require('mongoose');
 const dateFormat = require('../utils/dateFormat');
 
-const reactionSchema = new Schema(
+const stopSchema = new Schema(
   {
-    reactionBody: {
+    stopTitle: {
       type: String,
       required: true,
       maxlength: 280
+    },
+    stopText: {
+      type: String,
+      required: true,
+      maxlength: 2800
+    },
+    stopImgUrl: {
+      type: String,
+      required: true,
+      maxlength: 3000
+    },
+    stopReaction: {
+    type: String,
+    required: true,
+    maxlength: 280
     },
     username: {
       type: String,
@@ -25,4 +40,4 @@ const reactionSchema = new Schema(
   }
 );
 
-module.exports = reactionSchema;
+module.exports = stopSchema;

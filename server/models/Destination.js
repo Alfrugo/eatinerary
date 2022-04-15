@@ -1,8 +1,8 @@
 const { Schema, model } = require('mongoose');
-const reactionSchema = require('./Stop');
+const stopSchema = require('./Stop');
 const dateFormat = require('../utils/dateFormat');
 
-const thoughtSchema = new Schema(
+const destinationSchema = new Schema(
   {
     destinationTitle: {
       type: String,
@@ -49,10 +49,13 @@ const thoughtSchema = new Schema(
   }
 );
  
-// confused here 
-destinationSchema.virtual('reactionCount').get(function() {
+// three types of reaction positive meh neg / goes in the Stop.js model
+
+destinationSchema.virtual('positiveCount').get(function() {
   return this.reactions.length;
 });
+
+
 
 const Destination = model('Destination', destinationSchema);
 
