@@ -59,7 +59,7 @@ const typeDefs = gql`
     login(email: String!, password: String!): Auth
     addUser(username: String!, email: String!, password: String!): Auth
     addDestination(destinationTitle: String!): Destination
-    addStop(stopTitle: String!): Stop
+    addStop(destinationId: ID!, stopTitle: String!): Stop
     addReaction(stopId: ID!, reactionBody: String!): Stop
     addFriend(friendId: ID!): User
   }
