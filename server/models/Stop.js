@@ -1,7 +1,4 @@
-const { Schema } = require("mongoose");
-const dateFormat = require("../utils/dateFormat");
-
-const reactionSchema = require('./Reaction');
+const { Schema, model } = require("mongoose");
 
 const stopSchema = new Schema(
   {
@@ -20,23 +17,25 @@ const stopSchema = new Schema(
       required: true,
       maxlength: 3000,
     },
-    stopReaction: {
-      type: String,
-      required: true,
-      maxlength: 280,
-    },
     username: {
       type: String,
       required: true,
     },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-      get: (timestamp) => dateFormat(timestamp),
+    numPositiveReactions: {
+      type: Number,
+      required: false,
+      default: 0,
     },
-
-    reactions: [reactionSchema], //this will show the array of stops
-
+    numNegativeReactions: {
+      type: Number,
+      required: false,
+      default: 0,
+    },
+    numNeutralReactions: {
+      type: Number,
+      required: false,
+      default: 0,
+    },
   },
   {
     toJSON: {
@@ -45,15 +44,9 @@ const stopSchema = new Schema(
   }
 );
 
+const Stop = model("Stop", stopSchema);
 
-stopSchema.virtual("reactionCount").get(function () {
-  return this.reactions.length;
-});
-// stopSchema.virtual("mehCount").get(function () {
-//   return this.reactions.length;
-// });
-// stopSchema.virtual("negCount").get(function () {
-//   return this.reactions.length;
-// });
-
-module.exports = stopSchema;
+module.exports = {
+  Stop,
+  stopSchema
+};

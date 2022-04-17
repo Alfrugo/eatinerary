@@ -1,5 +1,5 @@
 const { AuthenticationError } = require('apollo-server-express');
-const { User, Thought } = require('../models');
+const { User, Destination, Stop } = require('../models');
 const { signToken } = require('../utils/auth');
 
 const resolvers = {
@@ -17,40 +17,31 @@ const resolvers = {
       
         throw new AuthenticationError('Not logged in');
       },
-      
-        // thoughts: async (parent, { username }) => {
-        //     const params = username ? { username } : {};
-        //     return Thought.find(params).sort({ createdAt: -1 });
-        //   },
 
-        //   thought: async (parent, { _id }) => {
-        //     return Thought.findOne({ _id });
-        //   },
+      destinations: async (parent, { username }) => {
+        const params = username ? { username } : {};
+        return Destination.find(params).sort({ createdAt: -1 });
+      },
 
-          destinations: async (parent, { username }) => {
-            const params = username ? { username } : {};
-            return Destination.find(params).sort({ createdAt: -1 });
-          },
+      destination: async (parent, { _id }) => {
+        return Destination.findOne({ _id });
+      },
 
-          destination: async (parent, { _id }) => {
-            return Destination.findOne({ _id });
-          },
-        // get all users 
-        users: async () => {
-            return User.find()
-                .select('-__v -password')
-                // .populate('friends')
-                // .populate('thoughts')
-                .populate('destinations');
-          },
-        // get a user by username
-        user: async (parent, { username }) => {
-            return User.findOne({ username })
-                //  .select('-__v -password')
-                .populate('friends')
-                .populate('thoughts')
-                .populate('destinations');
-        },      
+      users: async () => {
+        return User.find()
+            .select('-__v -password')
+            // .populate('friends')
+            // .populate('thoughts')
+            .populate('destinations');
+      },
+      // get a user by username
+      user: async (parent, { username }) => {
+        return User.findOne({ username })
+          //  .select('-__v -password')
+          .populate('friends')
+          .populate('thoughts')
+          .populate('destinations');
+      },      
     },
     Mutation: {
       addUser: async (parent, args) => {
@@ -76,7 +67,6 @@ const resolvers = {
         return { token, user };
       },
       addDestination: async (parent, args, context) => {
-        console.log('add destination ===========', { context });
         if (context.user) {
           const destination = await Destination.create({ ...args, username: context.user.username });
       
@@ -91,53 +81,57 @@ const resolvers = {
       
         throw new AuthenticationError('You need to be logged in!');
       },
-
       addStop: async (parent, args, context) => {
         if (context.user) {
           const stop = await Stop.create({ ...args, username: context.user.username });
       
           await Destination.findByIdAndUpdate(
-            // { _id: context.user._id },
-            { _id: destinationId },
+            { _id: args.destinationId },
             { $push: { stops: stop._id } },
             { new: true }
           );
       
-          return destination;
+          return stop;
         }
       
         throw new AuthenticationError('You need to be logged in!');
       },
-
-      addReaction: async (parent, { stopId, reactionBody }, context) => {
+      addPositiveReaction: async (parent, args, context) => {
         if (context.user) {
           const updatedStop = await Stop.findOneAndUpdate(
-            { _id: stopId },
-            { $push: { reactions: { reactionBody, username: context.user.username } } },
-            { new: true, runValidators: true }
+            { _id: args.stopId },
+            { $inc: { numPositiveReactions: 1 } },
           );
       
-          return updatedStop;
+          return await Stop.findOne({ _id: args.stopId });
         }
       
         throw new AuthenticationError('You need to be logged in!');
       },
-
-      // addFriend: async (parent, { friendId }, context) => {
-      //   if (context.user) {
-      //     const updatedUser = await User.findOneAndUpdate(
-      //       { _id: context.user._id },
-      //       { $addToSet: { friends: friendId } },
-      //       { new: true }
-      //     ).populate('friends');
+      addNegativeReaction: async (parent, args, context) => {
+        if (context.user) {
+          await Stop.findOneAndUpdate(
+            { _id: args.stopId },
+            { $inc: { numNegativeReactions: 1 } },
+          );
       
-      //     return updatedUser;
-      //   }
+          return await Stop.findOne({ _id: args.stopId });
+        }
       
-      //   throw new AuthenticationError('You need to be logged in!');
-      // }
+        throw new AuthenticationError('You need to be logged in!');
+      },
+      addNeutralReaction: async (parent, args, context) => {
+        if (context.user) {
+          const updatedStop = await Stop.findOneAndUpdate(
+            { _id: args.stopId },
+            { $inc: { numNeutralReactions: 1 } },
+          );
       
-
+          return await Stop.findOne({ _id: args.stopId });
+        }
+      
+        throw new AuthenticationError('You need to be logged in!');
+      },
     }
 };
 

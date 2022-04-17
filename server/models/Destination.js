@@ -1,6 +1,5 @@
 const { Schema, model } = require("mongoose");
-const stopSchema = require("./Stop");
-// const dateFormat = require("../utils/dateFormat");
+const { stopSchema } = require("./Stop");
 
 const destinationSchema = new Schema(
   {
@@ -31,11 +30,6 @@ const destinationSchema = new Schema(
       minlength: 1,
       maxlength: 1280,
     },
-    // createdAt: {
-    //   type: Date,
-    //   default: Date.now, // should this be a string?
-    //   get: timestamp => dateFormat(timestamp)
-    // },
     username: {
       type: String,
       required: true,
@@ -48,18 +42,6 @@ const destinationSchema = new Schema(
     },
   }
 );
-
-// three types of reaction positive meh neg / goes in the Stop.js model
-
-// destinationSchema.virtual('posCount').get(function() {
-//   return this.reactions.length;
-// });
-// destinationSchema.virtual('mehCount').get(function() {
-//   return this.reactions.length;
-// });
-// destinationSchema.virtual('negCount').get(function() {
-//   return this.reactions.length;
-// });
 
 const Destination = model("Destination", destinationSchema);
 
