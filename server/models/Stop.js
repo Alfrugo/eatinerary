@@ -1,43 +1,52 @@
-const { Schema } = require('mongoose');
-const dateFormat = require('../utils/dateFormat');
+const { Schema, model } = require("mongoose");
 
 const stopSchema = new Schema(
   {
     stopTitle: {
       type: String,
       required: true,
-      maxlength: 280
+      maxlength: 280,
     },
     stopText: {
       type: String,
       required: true,
-      maxlength: 2800
+      maxlength: 2800,
     },
     stopImgUrl: {
       type: String,
       required: true,
-      maxlength: 3000
-    },
-    stopReaction: {
-    type: String,
-    required: true,
-    maxlength: 280
+      maxlength: 3000,
     },
     username: {
       type: String,
-      required: true
+      required: true,
     },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-      get: timestamp => dateFormat(timestamp)
-    }
+    numPositiveReactions: {
+      type: Number,
+      required: false,
+      default: 0,
+    },
+    numNegativeReactions: {
+      type: Number,
+      required: false,
+      default: 0,
+    },
+    numNeutralReactions: {
+      type: Number,
+      required: false,
+      default: 0,
+    },
   },
   {
     toJSON: {
-      getters: true
-    }
+      getters: true,
+    },
   }
 );
 
-module.exports = stopSchema;
+const Stop = model("Stop", stopSchema);
+
+module.exports = {
+  Stop,
+  stopSchema
+};

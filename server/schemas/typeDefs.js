@@ -4,52 +4,56 @@ const { gql } = require ('apollo-server-express');
 
 // create our typeDefs
 
-
 const typeDefs = gql`
   type User {
     _id: ID
     username: String
     email: String
-    friendCount: Int
-    thoughts: [Thought]
-    friends: [User]
+    destinations: [Destination]
   }
 
-  type Thought {
+  type Destination {
     _id: ID
-    thoughtText: String
-    createdAt: String
+    destinationTitle: String
+    destinationText: String
+    destinationImgUrl: String
+    destinationLocUrl: String
     username: String
-    reactionCount: Int
-    reactions: [Reaction]
+    stops: [Stop]
   }
 
-  type Reaction {
+  type Stop {
     _id: ID
-    reactionBody: String
-    createdAt: String
+    stopTitle: String
+    stopText: String
+    stopImgUrl: String
     username: String
+    numPositiveReactions: Int
+    numNegativeReactions: Int
+    numNeutralReactions: Int
   }
 
   type Query {
     me: User
     users: [User]
     user(username: String!): User
-    thoughts(username: String): [Thought]
-    thought(_id: ID!): Thought
+    destinations(username: String): [Destination]
+    destination(_id: ID!): Destination
   }
 
   type Auth {
-      token: ID!
-      user: User
+    token: ID!
+    user: User
   }
 
   type Mutation {
     login(email: String!, password: String!): Auth
     addUser(username: String!, email: String!, password: String!): Auth
-    addThought(thoughtText: String!): Thought
-    addReaction(thoughtId: ID!, reactionBody: String!): Thought
-    addFriend(friendId: ID!): User
+    addDestination(destinationTitle: String!, destinationText: String!, destinationImgUrl: String!, destinationLocUrl: String!): Destination
+    addStop(destinationId: ID!, stopTitle: String!, stopText: String!, stopImgUrl: String!): Stop
+    addPositiveReaction(stopId: ID!): Stop
+    addNegativeReaction(stopId: ID!): Stop
+    addNeutralReaction(stopId: ID!): Stop
   }
 `;
 
