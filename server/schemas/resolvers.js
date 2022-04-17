@@ -76,6 +76,7 @@ const resolvers = {
         return { token, user };
       },
       addDestination: async (parent, args, context) => {
+        console.log('add destination ===========', { context });
         if (context.user) {
           const destination = await Destination.create({ ...args, username: context.user.username });
       

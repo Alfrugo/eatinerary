@@ -24,13 +24,20 @@ module.exports = {
                 .trim();
         }
 
-        // if no token, return request object as is
+        // if no token return empty object
         if (!token) {
-            return req;
+            return {};
         }
 
-        // return updated request object
-        return req;
+        try {
+            const { data } = jwt.verify(token, secret, { maxAge: expiration });
+            return {
+                user: data
+            };
+        } catch {
+            console.log('Invalid token');
+            return res.status(400).json({ message: 'invalid token!' });
+        }
     }
 
 };
