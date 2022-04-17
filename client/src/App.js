@@ -31,9 +31,7 @@ const client = new ApolloClient({
 const App = () => {
   return (
     <ApolloProvider client={client}>
-      <Layout>
-        <Destinations />
-      </Layout>
+      <Layout />
     </ApolloProvider>
   );
 }

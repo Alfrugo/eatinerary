@@ -98,12 +98,23 @@ const resolvers = {
       },
       addPositiveReaction: async (parent, args, context) => {
         if (context.user) {
-          const updatedStop = await Stop.findOneAndUpdate(
-            { _id: args.stopId },
-            { $inc: { numPositiveReactions: 1 } },
-          );
+          const dest = await Destination.findById(args.destinationId);
+          console.log(dest.stops);
+
+          const stop = dest.stops.findById(s => {
+            if (s) {
+              s._id.toString() === args.stopId
+            };
+            return false;
+          });
+          console.log(stop);
+          stop.numPositiveReactions = stop.numPositiveReactions+1;
+          await dest.stops.pull({ _id: args.stopId });
+          await dest.stops.push(stop)
+
+          await dest.save();
       
-          return await Stop.findOne({ _id: args.stopId });
+          return stop;
         }
       
         throw new AuthenticationError('You need to be logged in!');

@@ -5,7 +5,13 @@ import decode from 'jwt-decode';
 class AuthService {
   // get user data
   getProfile() {
-    return decode(this.getToken());
+    const token = this.getToken();
+
+    if (token) {
+      return decode(this.getToken());
+    }
+
+    return null;
   }
 
   // check if user's logged in
@@ -35,7 +41,6 @@ class AuthService {
   login(idToken) {
     // Saves user token to localStorage
     localStorage.setItem('id_token', idToken);
-    window.location.assign('/');
   }
 
   logout() {

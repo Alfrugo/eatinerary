@@ -51,9 +51,9 @@ const typeDefs = gql`
     addUser(username: String!, email: String!, password: String!): Auth
     addDestination(destinationTitle: String!, destinationText: String!, destinationImgUrl: String!, destinationLocUrl: String!): Destination
     addStop(destinationId: ID!, stopTitle: String!, stopText: String!, stopImgUrl: String!): Stop
-    addPositiveReaction(stopId: ID!): Stop
-    addNegativeReaction(stopId: ID!): Stop
-    addNeutralReaction(stopId: ID!): Stop
+    addPositiveReaction(destinationId: ID!, stopId: ID!): Stop
+    addNegativeReaction(destinationId: ID!, stopId: ID!): Stop
+    addNeutralReaction(destinationId: ID!, stopId: ID!): Stop
   }
 `;
 
