@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, styled, Typography, Button, Box, Dialog, Tabs, Tab } from '@mui/material';
+import { Container, styled, Typography, Button, Box, Dialog, Tabs, Tab, Link } from '@mui/material';
 import LoginForm from './LoginForm';
 import { TabPanel } from './TabPanel';
 import SignupForm from './SignupForm';
@@ -11,10 +11,19 @@ const Header = styled('div')(({ theme }) => `
     color: ${theme.palette.primary.contrastText};
     padding: ${theme.spacing(2, 0)};
 `);
+const Footer = styled('div')(({ theme }) => `
+    background: ${theme.palette.secondary.main};
+    color: ${theme.palette.secondary.contrastText};
+    padding: ${theme.spacing(2, 0)};
+
+`);
 
 const Background = styled('div')(({ theme }) => `
     background: ${theme.palette.background.main};
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+
 `);
 
 export const Layout = ({ }) => {
@@ -48,7 +57,7 @@ export const Layout = ({ }) => {
             <Container maxWidth="sm">
                 <Box display="flex" justifyContent="space-between" alignItems="center">
                     <Typography sx={{ fontWeight: 800 }} variant="h5">
-                        eatinerary
+                        eatinerary 🍷
                     </Typography>
                     { !!user && (
                         <Box display="flex" alignItems="center" gap={2}>
@@ -64,9 +73,33 @@ export const Layout = ({ }) => {
                 </Box>
             </Container>
         </Header>
-        <Container maxWidth="sm">
+        <Container maxWidth="sm" sx={{flexGrow: 1}}>
             <Destinations user={user} />
         </Container>
+        <Footer>
+            <Container maxWidth="sm">
+                <Box display="flex" justifyContent="space-between">
+                <Typography variant= "h5">
+                    eatinerary 🍷
+                </Typography>
+                <Box display="flex" flexDirection= "column" alignItems="flex-end">
+                    <Typography variant="h5">
+                        Creators
+                    </Typography>
+                    <Link href="https://github.com/Alfrugo" target="_blank">
+                        Alfredo 
+                    </Link>
+                    <Link href="https://github.com/tiffsobczak" target="_blank">
+                        Tiffany
+                    </Link>
+                    <Link href="https://github.com/IzorIzzy" target="_blank">
+                        Issachar
+                    </Link>
+                </Box>
+                </Box>
+                
+            </Container>
+        </Footer>
         {/* set modal data up */}
       <Dialog
         fullWidth
