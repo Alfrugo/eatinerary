@@ -51,12 +51,11 @@ const typeDefs = gql`
     addUser(username: String!, email: String!, password: String!): Auth
     addDestination(destinationTitle: String!, destinationText: String!, destinationImgUrl: String!, destinationLocUrl: String!): Destination
     addStop(destinationId: ID!, stopTitle: String!, stopText: String!, stopImgUrl: String!): Stop
-    addPositiveReaction(stopId: ID!): Stop
-    addNegativeReaction(stopId: ID!): Stop
-    addNeutralReaction(stopId: ID!): Stop
+    addPositiveReaction(stopId: ID!): Destination
+    addNegativeReaction(stopId: ID!): Destination
+    addNeutralReaction(stopId: ID!): Destination
   }
 `;
 
 // export te typeDefs
 module.exports = typeDefs;
-
