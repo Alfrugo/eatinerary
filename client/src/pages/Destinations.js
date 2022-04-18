@@ -47,7 +47,13 @@ export const Destinations = ({ user }) => {
             </Wrapper>
         </TabPanel>
         <TabPanel value={selectedTab} index={1}>
-            
+            <Wrapper>
+                { data.destinations
+                .filter((destination) => destination.username === user.username)
+                .map(
+                    (destination) => <Destination key={destination._id} destination={destination} />
+                ) }
+            </Wrapper>
         </TabPanel>
     </div>
   );

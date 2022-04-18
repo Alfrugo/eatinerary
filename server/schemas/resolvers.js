@@ -1,6 +1,8 @@
 const { AuthenticationError } = require('apollo-server-express');
 const { User, Destination, Stop } = require('../models');
 const { signToken } = require('../utils/auth');
+const mongoose = require('mongoose');
+
 
 const resolvers = {
     Query: {
@@ -87,7 +89,7 @@ const resolvers = {
       
           await Destination.findByIdAndUpdate(
             { _id: args.destinationId },
-            { $push: { stops: stop._id } },
+            { $push: { stops: stop } },
             { new: true }
           );
       
@@ -98,47 +100,36 @@ const resolvers = {
       },
       addPositiveReaction: async (parent, args, context) => {
         if (context.user) {
-          const dest = await Destination.findById(args.destinationId);
-          console.log(dest.stops);
-
-          const stop = dest.stops.findById(s => {
-            if (s) {
-              s._id.toString() === args.stopId
-            };
-            return false;
-          });
-          console.log(stop);
-          stop.numPositiveReactions = stop.numPositiveReactions+1;
-          await dest.stops.pull({ _id: args.stopId });
-          await dest.stops.push(stop)
-
-          await dest.save();
+          await Destination.findOneAndUpdate(
+            { 'stops._id': mongoose.Types.ObjectId(args.stopId) },
+            { $inc: { 'stops.$.numPositiveReactions': 1 } }
+          );
       
-          return stop;
+          return await Destination.findOne({ 'stops._id': mongoose.Types.ObjectId(args.stopId) });
         }
       
         throw new AuthenticationError('You need to be logged in!');
       },
       addNegativeReaction: async (parent, args, context) => {
         if (context.user) {
-          await Stop.findOneAndUpdate(
-            { _id: args.stopId },
-            { $inc: { numNegativeReactions: 1 } },
+          await Destination.findOneAndUpdate(
+            { 'stops._id': mongoose.Types.ObjectId(args.stopId) },
+            { $inc: { 'stops.$.numNegativeReactions': 1 } }
           );
       
-          return await Stop.findOne({ _id: args.stopId });
+          return await Destination.findOne({ 'stops._id': mongoose.Types.ObjectId(args.stopId) });
         }
       
         throw new AuthenticationError('You need to be logged in!');
       },
       addNeutralReaction: async (parent, args, context) => {
         if (context.user) {
-          const updatedStop = await Stop.findOneAndUpdate(
-            { _id: args.stopId },
-            { $inc: { numNeutralReactions: 1 } },
+          await Destination.findOneAndUpdate(
+            { 'stops._id': mongoose.Types.ObjectId(args.stopId) },
+            { $inc: { 'stops.$.numNeutralReactions': 1 } }
           );
       
-          return await Stop.findOne({ _id: args.stopId });
+          return await Destination.findOne({ 'stops._id': mongoose.Types.ObjectId(args.stopId) });
         }
       
         throw new AuthenticationError('You need to be logged in!');
