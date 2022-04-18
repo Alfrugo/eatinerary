@@ -17,16 +17,7 @@ const SignupForm = ({ closeModal }) => {
   const [username, setUsername] = useState('');
   const [addUser, { error }] = useMutation(ADD_USER);
 
-  const handleFormSubmit = async (event) => {
-    event.preventDefault();
-
-    // check if form has everything (as per react-bootstrap docs)
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-
+  const handleFormSubmit = async () => {
     try {
       const { data } = await addUser({
         variables: { username, email, password },

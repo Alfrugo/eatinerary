@@ -1,7 +1,8 @@
 import { Card, CardContent, CardActions, styled, Typography, Button, Box, CardHeader, Avatar, CardMedia } from '@mui/material';
 import { red } from '@mui/material/colors';
+import { StopsModal } from './StopsModal';
 
-export const Destination = ({ destination }) => {
+export const Destination = ({ user, destination, onPositiveReaction, onNeutralReaction, onNegativeReaction }) => {
   return (
     <Card>
         <CardHeader
@@ -25,7 +26,14 @@ export const Destination = ({ destination }) => {
             </Typography>
         </CardContent>
         <CardActions>
-            <Button sx={{ fontWeight: 800 }} size="small">See Stops</Button>
+            <StopsModal
+              user={user}
+              stops={destination.stops}
+              destinationTitle={destination.destinationTitle}
+              onPositiveReaction={onPositiveReaction}
+              onNeutralReaction={onNeutralReaction}
+              onNegativeReaction={onNegativeReaction}
+            />
         </CardActions>
     </Card>
   );
